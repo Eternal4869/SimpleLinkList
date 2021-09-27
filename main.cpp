@@ -1,114 +1,235 @@
-#include<iostream>
+#include <iostream>
 using namespace std;
 
-template<class ElemType>
+template <class ElemType>
 struct Node
 {
-    ElemType data;//Êı¾İÓò
-    Node<ElemType>* next;//Ö¸ÕëÓò
+    ElemType data;        //æ•°æ®åŸŸ
+    Node<ElemType> *next; //æŒ‡é’ˆåŸŸ
 
-    Node()//ÎŞ²Î¹¹Ôìº¯Êı
+    Node() //æ— å‚æ„é€ å‡½æ•°
     {
-        next = NULL;
+        next = nullptr;
     }
 
-    Node(ElemType item, Node<ElemType>* link = NULL)//ÓĞ²Î¹¹Ôìº¯Êı
+    Node(ElemType item, Node<ElemType> *link = nullptr) //æœ‰å‚æ„é€ å‡½æ•°
     {
         data = item;
         next = link;
     }
 };
 
-template<class ElemType>
+template <class ElemType>
 class SimpleLinkList
 {
 protected:
-	Node<ElemType>* head;//Í·½áµãÖ¸Õë
-    Node<ElemType>* GetElemPtr(int pos) const;//·µ»ØÖ¸ÏòposÎ»ÖÃ½áµãµÄÖ¸Õë
+    Node<ElemType> *head;                     //å¤´èŠ‚ç‚¹æŒ‡é’ˆ
+    Node<ElemType> *GetPosPtr(int pos) const; //è·å–æ¬²æ±‚ä½ç½®æŒ‡é’ˆ
 public:
-	SimpleLinkList();//ÎŞ²Î¹¹Ôì
-	~SimpleLinkList();//Îö¹¹
-    int Length() const;//Çó³¤¶È
-    bool Empty() const;//ÅĞ¶ÏÊÇ·ñÎª¿Õ
-    void Clear();//Çå¿ÕÏßĞÔ±í
-    void Traverse() const;//±éÀú
-    bool GetElem(int pos, ElemType& e) const;
-    bool SetElem(int pos, ElemType& e);
-    bool Delete(int pos, ElemType& e);
-    bool Insert(int pos, const ElemType& e);
-    SimpleLinkList(const SimpleLinkList<ElemType>& copy);
-    SimpleLinkList<ElemType>& operator=(const SimpleLinkList<ElemType>& copy);
+    SimpleLinkList();
+    ~SimpleLinkList();
+    int Length() const;
+    bool Empty() const;
+    void Clear();
+    void Traverse() const;
+    bool GetElem(int pos, ElemType &e) const;
+    bool SetElem(int pos, const ElemType &e) const;
+    bool Delete(int pos, ElemType &e);
+    bool Insert(int pos, const ElemType &e);
+    SimpleLinkList(const SimpleLinkList<ElemType> &copy);
+    SimpleLinkList<ElemType> &operator=(const SimpleLinkList<ElemType> &copy);
 };
 
-template<class ElemType>
-Node<ElemType>* SimpleLinkList<ElemType>::GetElemPtr(int pos) const
+template <class ElemType>
+Node<ElemType> *SimpleLinkList<ElemType>::GetPosPtr(int pos) const
 {
-    Node<ElemType>* ptr = head;
-    int c = 0;
-    while (c < pos)
+    Node<ElemType> *t = head;
+    int a = 0;
+    while (a < pos)
     {
-        ptr = ptr->next;
-        c++;
+        a++;
+        t = t->next;
     }
-    return ptr;
+    return t;
 }
 
-template<class ElemType>
+template <class ElemType>
 SimpleLinkList<ElemType>::SimpleLinkList()
 {
     head = new Node<ElemType>;
 }
 
-template<class ElemType>
-bool SimpleLinkList<ElemType>::Empty() const
-{
-    if (head->next == NULL)
-    {
-        return true;
-    }
-    else
-    {
-        return false;
-    }
-}
-
-template<class ElemType>
-void SimpleLinkList<ElemType>::Clear()
-{
-    ElemType t;
-    while (!Empty())
-    {
-        Delete(1, t);//Èç¹û²»¿Õ£¬´ÓÁ´±íÍ·£¨1£©¿ªÊ¼É¾³ı£¬Ö±µ½Çå¿Õ
-    }
-}
-
-template<class ElemType>
+template <class ElemType>
 SimpleLinkList<ElemType>::~SimpleLinkList()
 {
     Clear();
     delete head;
 }
 
-template<class ElemType>
-bool SimpleLinkList<ElemType>::Insert(int pos, const ElemType& e)
+template <class ElemType>
+int SimpleLinkList<ElemType>::Length() const
 {
-    if (pos < 1 || pos > count+1)
+    Node<ElemType> *a = head->next;
+    int length = 0;
+    while (a != nullptr)
+    {
+        length++;
+        a = a->next;
+    }
+    return length;
+}
+
+template <class ElemType>
+bool SimpleLinkList<ElemType>::Empty() const
+{
+    if (head->next == nullptr)
+    {
+        return true;
+    }
+    else
+    {
+        return false;
+    }
+}
+
+template <class ElemType>
+void SimpleLinkList<ElemType>::Clear()
+{
+    ElemType t;
+    while (!Empty())
+    {
+        Delete(1, t);
+    }
+}
+
+template <class ElemType>
+void SimpleLinkList<ElemType>::Traverse() const
+{
+    Node<ElemType> *ptr = head->next;
+    while (ptr != nullptr)
+    {
+        cout << ptr->data << endl;
+        ptr = ptr->next;
+    }
+}
+
+template <class ElemType>
+bool SimpleLinkList<ElemType>::SetElem(int pos, const ElemType &e) const
+{
+    if (pos < 1 || pos > Length())
     {
         return false;
     }
     else
     {
-        Node<ElemType>* tPtr, newtPtr;
-        tPtr = GetElem(pos - 1);//È¡³öposÎ»ÖÃÇ°Ò»Î»µÄÖ¸Õë
-        newtPtr = new Node<ElemType>(e);//Éú³ÉĞÂ½áµã
-        newtPtr->next = tPtr->next;
-        tPtr->next = newtPtr;//½«newPtr²åÈëÁ´±í
+        Node<ElemType> *temPtr;
+        temPtr = GetPosPtr(pos);
+        temPtr->data = e;
         return true;
     }
 }
 
+template <class ElemType>
+bool SimpleLinkList<ElemType>::GetElem(int pos, ElemType &e) const
+{
+    if (pos > 1 || pos > Length())
+    {
+        return false;
+    }
+    else
+    {
+        Node<ElemType> *temPtr;
+        temPtr = GetPosPtr(pos);
+        e = temPtr->data;
+        return true;
+    }
+}
+
+template <class ElemType>
+bool SimpleLinkList<ElemType>::Delete(int pos, ElemType &e)
+{
+    if (Length() == 0)
+    {
+        return false;
+    }
+    if (pos < 1 || pos > Length())
+    {
+        return false;
+    }
+    else
+    {
+        Node<ElemType> *temPtr, *temFrPtr;
+        //temPtr = GetPosPtr(pos);
+        temFrPtr = GetPosPtr(pos - 1);
+        temPtr = temFrPtr->next;
+        temFrPtr->next = temPtr->next;
+        e = temPtr->data; //ç”¨eè¿”å›è¢«åˆ é™¤ç»“ç‚¹çš„å…ƒç´ å€¼
+        delete temPtr;    //é‡Šæ”¾è¢«åˆ é™¤ç»“ç‚¹
+        return true;
+    }
+}
+
+template <class ElemType>
+bool SimpleLinkList<ElemType>::Insert(int pos, const ElemType &e)
+{
+    if (pos > Length() + 1 || pos < 1)
+    {
+        return false;
+    }
+    else
+    {
+        Node<ElemType> *newPtr, *temPtr;
+        temPtr = GetPosPtr(pos - 1);    //å–å‡ºæŒ‡å‘ç¬¬pos-1ä¸ªç»“ç‚¹çš„æŒ‡é’ˆ
+        newPtr = new Node<ElemType>(e); //ç”Ÿæˆæ–°ç»“ç‚¹
+        newPtr->next = temPtr->next;
+        temPtr->next = newPtr; //å°†temPtræ’å…¥åˆ°é“¾è¡¨ä¸­
+        return true;
+    }
+}
+
+template <class ElemType>
+SimpleLinkList<ElemType>::SimpleLinkList(const SimpleLinkList &copy)
+{
+    Node<ElemType> *p, *r, *q;
+    head = new Node<ElemType>;
+    p = head;
+    q = head->next;
+    while (q != nullptr)
+    {
+        r = new Node<ElemType>(q->data);
+        p->next = r;
+        p = r;
+        q = q->next;
+    }
+}
+
+template <class ElemType>
+SimpleLinkList<ElemType> &SimpleLinkList<ElemType>::operator=(const SimpleLinkList<ElemType> &copy)
+{
+    ElemType t;
+    while (!Empty())
+    {
+        Delete(1, t);
+    }
+    delete head;
+    Node<ElemType> *p, *q, *r;
+    head = new Node<ElemType>;
+    p = head->next;
+    q = copy.head->next;
+    while (q != nullptr)
+    {
+        r = new Node<ElemType>(q->data);
+        p->next = r;
+        p = r;
+        q = q->next;
+    }
+}
+
+//A simple for test.
 int main()
 {
-
-	return 0;
+    SimpleLinkList<int> S1;
+    S1.Insert(1, 1);
+    S1.Traverse();
+    return 0;
 }
