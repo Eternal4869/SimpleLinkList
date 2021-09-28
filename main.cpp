@@ -225,7 +225,7 @@ SimpleLinkList<ElemType> &SimpleLinkList<ElemType>::operator=(const SimpleLinkLi
     }
 }
 
-//A simple for test.
+//A test case.
 int main()
 {
     SimpleLinkList<int> S1;
