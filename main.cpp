@@ -1,3 +1,9 @@
+/*
+ * @Author: Eternal4869 
+ * @Date: 2021-11-02 14:49:35 
+ * @Last Modified by:   Eternal4869 
+ * @Last Modified time: 2021-11-02 14:49:35 
+ */
 #include <iostream>
 using namespace std;
 
@@ -225,11 +231,18 @@ SimpleLinkList<ElemType> &SimpleLinkList<ElemType>::operator=(const SimpleLinkLi
     }
 }
 
-//A test case.
 int main()
 {
     SimpleLinkList<int> S1;
     S1.Insert(1, 1);
+    cout << "现在链表长度为 : " << S1.Length() << endl;
+    S1.Insert(1, 2);
+    cout << "现在链表长度为 : " << S1.Length() << endl;
+    cout << "遍历链表 : " << endl;
     S1.Traverse();
+    int a;
+    S1.Delete(1, a);
+    cout << a << endl;
+    cout << "现在链表长度为 : " << S1.Length() << endl;
     return 0;
 }
